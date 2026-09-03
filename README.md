@@ -153,6 +153,9 @@ docker compose up --build
 - **Backend API**: `http://localhost:5000`
 - **PostgreSQL Database**: `localhost:5432`
 
+### Option C: Cloud Deployment (Vercel + Render + Neon)
+For complete instructions on deploying the frontend to **Vercel**, the API to **Render**, and the database to **Neon**, see the [Cloud Deployment Guide](DEPLOYMENT.md).
+
 ---
 
 ## Local Development Setup

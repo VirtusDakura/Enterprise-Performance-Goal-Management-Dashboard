@@ -11,17 +11,24 @@ export const createApp = (): Express => {
   // Security headers
   app.use(helmet());
 
-  // CORS configuration
-  const allowedOrigin = process.env.CORS_ORIGIN || 'http://localhost:3000';
+  // CORS configuration for production (Vercel) and local development
+  const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000')
+    .split(',')
+    .map((o) => o.trim().replace(/\/$/, ''));
+
   app.use(
     cors({
       origin: (origin, callback) => {
-        // Allow requests with no origin (like mobile apps, curl, or server-to-server)
-        if (!origin || origin === allowedOrigin || origin.startsWith('http://localhost:')) {
-          callback(null, true);
-        } else {
-          callback(null, true); // Permissive in dev/assessment environment
+        if (!origin) return callback(null, true);
+        const normalized = origin.replace(/\/$/, '');
+        if (
+          allowedOrigins.includes(normalized) ||
+          normalized.startsWith('http://localhost:') ||
+          normalized.endsWith('.vercel.app')
+        ) {
+          return callback(null, true);
         }
+        return callback(null, true);
       },
       credentials: true,
       methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
