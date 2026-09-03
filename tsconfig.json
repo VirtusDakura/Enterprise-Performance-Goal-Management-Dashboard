@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@/*": ["./frontend/src/*"]
+    }
+  },
+  "include": [
+    "backend/src/**/*",
+    "backend/prisma/**/*",
+    "backend/test-api.ts",
+    "frontend/src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "backend/node_modules",
+    "frontend/node_modules",
+    "backend/dist",
+    "frontend/.next"
+  ]
+}

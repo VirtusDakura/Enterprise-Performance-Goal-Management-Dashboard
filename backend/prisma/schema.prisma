@@ -1,0 +1,67 @@
+// Enterprise Performance & Goal Management System
+// Relational Database Schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Department {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  employees Employee[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("departments")
+}
+
+model Employee {
+  id           String     @id @default(uuid())
+  name         String
+  email        String     @unique
+  role         String
+  avatarUrl    String?
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  goals        Goal[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([departmentId])
+  @@map("employees")
+}
+
+model Goal {
+  id          String       @id @default(uuid())
+  title       String
+  description String       @db.Text
+  deadline    DateTime
+  progress    Int          @default(0)
+  employeeId  String
+  employee    Employee     @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  reviews     PeerReview[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([employeeId])
+  @@map("goals")
+}
+
+model PeerReview {
+  id           String   @id @default(uuid())
+  reviewerName String
+  feedback     String   @db.Text
+  rating       Int
+  goalId       String
+  goal         Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([goalId])
+  @@map("peer_reviews")
+}
